@@ -105,3 +105,54 @@ type Color = 'yellow' | 'navy blue'
 let color: Color = 'yellow'
 color = 'navy blue'
 // color = 'red'
+
+
+// * ---- 9. Objects & Readonly ----
+// Define object shapes with type annotations.
+// 'readonly' prevents a property from being changed after creation.
+
+type User = {
+    id: string;
+    name: string;  // 'ali', 'mehmet, ....
+    email: string;
+    dob?: Date; // dob olmayadabilir
+    isVerified: boolean;
+    role: "caseofficer" | "arcitecture" | "caseworker" | 'systemofficer';
+    age: number
+}
+
+const loginUser: User = {
+    id: "1234",
+    name: 'lee',
+    email: 'lee@test.com',
+    isVerified: true,
+    role: 'caseworker',
+    age: 28
+}
+
+//! loginUser.role = 'admin'
+
+
+// const userArr: Array<User> = [];
+const userArr: User[] = [];
+userArr.push(loginUser)
+
+// * ---- 10. Intersection Types ----
+// Combine multiple types into one using '&'.
+
+type Book = {
+    title: string;
+    pages?: number 
+} 
+
+type Author = {
+    name: string
+}
+
+type BookWithAuthor = Book & Author
+
+const expBook: BookWithAuthor = {
+    title: 'book 1',
+    pages: 150,
+    name: 'lee'
+}
