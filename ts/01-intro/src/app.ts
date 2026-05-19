@@ -1,3 +1,5 @@
+// to create tsconfig tsc --init
+
 // console.log('selam');
 
 // const a = (a, b) => a + b;
@@ -37,9 +39,11 @@ numbers.push(123)
 const student: [number, string, boolean] = [1, 'lee', true]
 
 // const classRoster: Array<{ name: string }> = []
-const classRoster: { name: string, score: number }[] = [{ name: 'lee', score: 90 }, { name: 'bunyamin', score: 100 }]
-const obj = { namee: 'ali', score: 80 }
-//! classRoster.push(obj)
+const classRoster: { name: string, score: number }[] = []
+const obj = { name: 'ali', score: 80 }
+
+classRoster.push(obj)
+// classRoster.push(2)
 
 // [[1, 'lalalal']]
 const exp: [number, string][] = []
