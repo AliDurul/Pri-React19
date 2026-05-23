@@ -13,15 +13,14 @@ import type { ITodo } from "./types/todos";
 function App() {
   // const [todos, setTodos] = useState([] as ITodo[]);
   // const [todos, setTodos] = useState<Array<ITodo>>([]);
-  const [todos, setTodos] = useState<ITodo[]>([
-    { id: 1, task: "learn typescript", isDone: false },
-  ]);
+
+  const [todos, setTodos] = useState<ITodo[]>([]);
 
   return (
     <div className="container mx-auto p-4">
       <Header />
       <TodoForm setTodos={setTodos} />
-      <TodoList todos={todos} />
+      <TodoList todos={todos} setTodos={setTodos} />
     </div>
   );
 }

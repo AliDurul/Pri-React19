@@ -12,9 +12,10 @@ import type { ITodo } from "../types/todos";
 // way 2
 interface ITodoListProps {
   todos: ITodo[];
+  setTodos: React.Dispatch<React.SetStateAction<ITodo[]>>
 }
 
-export default function TodoList({ todos }: ITodoListProps) {
+export default function TodoList({ todos, setTodos }: ITodoListProps) {
   return (
     <div>
       {todos.map((todo) => (
@@ -25,7 +26,12 @@ export default function TodoList({ todos }: ITodoListProps) {
           <span className={todo.isDone ? "line-through text-gray-500" : ""}>
             {todo.task}
           </span>
-          <button className="text-red-500">Delete</button>
+          <button
+            className="text-red-500"
+            onClick={()=> setTodos((prev)=> prev.filter(t => t.id !== todo.id ))}
+          >
+            Delete
+          </button>
         </div>
       ))}
     </div>
