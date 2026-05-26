@@ -4,23 +4,18 @@ import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
 import type { ITodo } from "./types/todos";
 
-// interface ITodo {
-//   id: number;
-//   task: string;
-//   isDone: boolean;
-// }
-
 function App() {
-  // const [todos, setTodos] = useState([] as ITodo[]);
-  // const [todos, setTodos] = useState<Array<ITodo>>([]);
-
   const [todos, setTodos] = useState<ITodo[]>([]);
 
+  const doneCount = todos.filter((t) => t.isDone).length;
+
   return (
-    <div className="container mx-auto p-4">
-      <Header />
-      <TodoForm setTodos={setTodos} />
-      <TodoList todos={todos} setTodos={setTodos} />
+    <div className="min-h-screen bg-slate-100 flex items-start justify-center px-4 py-12">
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-6">
+        <Header count={todos.length} doneCount={doneCount} />
+        <TodoForm setTodos={setTodos} />
+        <TodoList todos={todos} setTodos={setTodos} />
+      </div>
     </div>
   );
 }
