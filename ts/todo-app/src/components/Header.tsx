@@ -1,9 +1,8 @@
-interface IHeaderProps {
-  count: number;
-  doneCount: number;
-}
+import { useTodoContext } from "../context/TodoContext";
 
-export default function Header({ count, doneCount }: IHeaderProps) {
+export default function Header() {
+  const { doneCount, count } = useTodoContext();
+
   return (
     <header className="flex flex-col items-center gap-2 mb-8">
       <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-50 mb-1">

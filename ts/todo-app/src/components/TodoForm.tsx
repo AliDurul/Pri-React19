@@ -1,13 +1,14 @@
-import React, { useState, type ChangeEvent } from "react";
+import { useContext, useState, type ChangeEvent } from "react";
 import type { ITodo } from "../types/todos";
+import { TodoContext, useTodoContext } from "../context/TodoContext";
 
-interface ITodoFormProps {
-  setTodos: React.Dispatch<React.SetStateAction<ITodo[]>>;
-}
 
-export default function TodoForm({ setTodos }: ITodoFormProps) {
+export default function TodoForm() {
+
+  const { setTodos } = useTodoContext();
+
   const [task, setTask] = useState("");
-  
+
 
   const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();

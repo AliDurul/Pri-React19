@@ -1,10 +1,5 @@
 import { useState } from "react";
-import type { ITodo } from "../types/todos";
-
-interface ITodoListProps {
-  todos: ITodo[];
-  setTodos: React.Dispatch<React.SetStateAction<ITodo[]>>;
-}
+import { useTodoContext } from "../context/TodoContext";
 
 // ── Inline SVG icons ──────────────────────────────────────────────────────────
 
@@ -58,10 +53,11 @@ function XMarkIcon({ className }: { className?: string }) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function TodoList({ todos, setTodos }: ITodoListProps) {
+export default function TodoList() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
-  
+  const { todos, setTodos } = useTodoContext();
+
 
   if (todos.length === 0) {
     return (
@@ -126,11 +122,10 @@ export default function TodoList({ todos, setTodos }: ITodoListProps) {
             // ── View mode ──────────────────────────────────────────────────
             <>
               <span
-                className={`flex-1 text-sm ${
-                  todo.isDone
-                    ? "line-through text-slate-400"
-                    : "text-slate-800"
-                }`}
+                className={`flex-1 text-sm ${todo.isDone
+                  ? "line-through text-slate-400"
+                  : "text-slate-800"
+                  }`}
               >
                 {todo.task}
               </span>
@@ -138,11 +133,10 @@ export default function TodoList({ todos, setTodos }: ITodoListProps) {
                 {/* Done / Undo */}
                 <button
                   aria-label={todo.isDone ? "Mark as not done" : "Mark as done"}
-                  className={`p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 ${
-                    todo.isDone
-                      ? "text-emerald-500 hover:text-slate-400 hover:bg-slate-100 focus:ring-slate-300"
-                      : "text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 focus:ring-emerald-300"
-                  }`}
+                  className={`p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 ${todo.isDone
+                    ? "text-emerald-500 hover:text-slate-400 hover:bg-slate-100 focus:ring-slate-300"
+                    : "text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 focus:ring-emerald-300"
+                    }`}
                   onClick={() =>
                     setTodos((prev) =>
                       prev.map((t) =>
