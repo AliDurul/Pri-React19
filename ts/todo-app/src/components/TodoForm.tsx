@@ -1,26 +1,9 @@
-import { useContext, useState, type ChangeEvent } from "react";
-import type { ITodo } from "../types/todos";
-import { TodoContext, useTodoContext } from "../context/TodoContext";
+import { useTodoContext } from "../context/TodoContext";
 
 
 export default function TodoForm() {
 
-  const { setTodos } = useTodoContext();
-
-  const [task, setTask] = useState("");
-
-
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const newTask: ITodo = {
-      id: Date.now(),
-      task: task,
-      isDone: false,
-    };
-    setTodos((oncekiTodolar) => [newTask, ...oncekiTodolar]);
-    setTask("");
-  };
+  const { taskInput, setTaskInput, handleSubmit } = useTodoContext();
 
   return (
     <form className="flex gap-2 mb-6" onSubmit={handleSubmit}>
@@ -31,11 +14,11 @@ export default function TodoForm() {
         id="todo-input"
         type="text"
         name="todo"
-        value={task}
+        value={taskInput}
         required
         placeholder="What needs to be done?"
         className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition-shadow"
-        onChange={(e) => setTask(e.target.value)}
+        onChange={(e) => setTaskInput(e.target.value)}
       />
       <button
         type="submit"

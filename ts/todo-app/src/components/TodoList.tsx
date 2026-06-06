@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useTodoContext } from "../context/TodoContext";
 
 // ── Inline SVG icons ──────────────────────────────────────────────────────────
 
@@ -52,12 +50,11 @@ function XMarkIcon({ className }: { className?: string }) {
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
+import { useTodoContext } from "../context/TodoContext";
+
 
 export default function TodoList() {
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editValue, setEditValue] = useState("");
-  const { todos, setTodos } = useTodoContext();
-
+  const { todos, editingId, setEditingId, editValue, deleteTodo, setEditValue, saveEdit, toggleDone, startEditing } = useTodoContext();
 
   if (todos.length === 0) {
     return (
@@ -89,10 +86,7 @@ export default function TodoList() {
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    setTodos((prev) =>
-                      prev.map((t) => (t.id === todo.id ? { ...t, task: editValue } : t))
-                    );
-                    setEditingId(null);
+                    saveEdit(todo.id)
                   }
                 }}
               />
@@ -100,12 +94,7 @@ export default function TodoList() {
                 <button
                   aria-label="Save changes"
                   className="p-2 rounded-lg text-white bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-1 transition-colors"
-                  onClick={() => {
-                    setTodos((prev) =>
-                      prev.map((t) => (t.id === todo.id ? { ...t, task: editValue } : t))
-                    );
-                    setEditingId(null);
-                  }}
+                  onClick={() => { saveEdit(todo.id) }}
                 >
                   <CheckIcon className="w-4 h-4" />
                 </button>
@@ -137,14 +126,7 @@ export default function TodoList() {
                     ? "text-emerald-500 hover:text-slate-400 hover:bg-slate-100 focus:ring-slate-300"
                     : "text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 focus:ring-emerald-300"
                     }`}
-                  onClick={() =>
-                    setTodos((prev) =>
-                      prev.map((t) =>
-                        t.id === todo.id ? { ...t, isDone: !t.isDone } : t
-                      )
-                    )
-                  }
-                >
+                  onClick={() => toggleDone(todo.id)}>
                   {todo.isDone ? (
                     <ArrowUturnLeftIcon className="w-4 h-4" />
                   ) : (
@@ -156,10 +138,7 @@ export default function TodoList() {
                 <button
                   aria-label="Edit task"
                   className="p-2 rounded-lg text-slate-400 hover:text-blue-500 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-1 transition-colors"
-                  onClick={() => {
-                    setEditingId(todo.id);
-                    setEditValue(todo.task);
-                  }}
+                  onClick={() => { startEditing(todo) }}
                 >
                   <PencilSquareIcon className="w-4 h-4" />
                 </button>
@@ -168,10 +147,7 @@ export default function TodoList() {
                 <button
                   aria-label="Delete task"
                   className="p-2 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-300 focus:ring-offset-1 transition-colors"
-                  onClick={() =>
-                    setTodos((prev) => prev.filter((t) => t.id !== todo.id))
-                  }
-                >
+                  onClick={() => deleteTodo(todo.id)}>
                   <TrashIcon className="w-4 h-4" />
                 </button>
               </div>
