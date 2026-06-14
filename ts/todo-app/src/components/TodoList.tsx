@@ -54,7 +54,7 @@ import { useTodoContext } from "../context/TodoContext";
 
 
 export default function TodoList() {
-  const { todos, editingId, setEditingId, editValue, deleteTodo, setEditValue, saveEdit, toggleDone, startEditing } = useTodoContext();
+  const { todos, editingId, setEditingId, editValue, setEditValue, deleteTodo, saveEdit, toggleDone, startEditing } = useTodoContext();
 
   if (todos.length === 0) {
     return (
