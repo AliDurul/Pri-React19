@@ -27,8 +27,7 @@ export const TodoContext = createContext<ITodoContext | null>(null);
 
 export function TodoProvider({ children }: { children: React.ReactNode }) {
 
-    const { fetchTodos, postTodo, delTodo } = useTodosApi();
-
+    const { fetchTodos, postTodo, delTodo, updateTodo } = useTodosApi();
 
     const [todos, setTodos] = useState<ITodo[]>([]);
     const [taskInput, setTaskInput] = useState("");
@@ -53,11 +52,14 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
 
     };
 
-    const saveEdit = (id: number) => {
-        setTodos((prev) =>
-            prev.map((t) => (t.id === id ? { ...t, task: editValue } : t))
-        );
+    const saveEdit = async (id: number) => {
+        await updateTodo(id, editValue);
         setEditingId(null);
+
+        setLoading(true);
+        const todos = await fetchTodos()
+        setTodos(todos);
+        setLoading(false);
     }
 
     const toggleDone = (id: number) => {
@@ -75,15 +77,12 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
 
     const deleteTodo = async (id: number) => {
         await delTodo(id)
-        
+
         setLoading(true);
         const todos = await fetchTodos()
         setTodos(todos);
         setLoading(false);
     }
-
-    // useTodoApi functions
-
 
     useEffect(() => {
         setLoading(true)

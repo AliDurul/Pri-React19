@@ -9,7 +9,6 @@ const BASE_URL = "https://6a247cb6420469ff067b18f6.mockapi.io/todos"
 
 const useTodosApi = () => {
 
-
     async function fetchTodos() {
         // await new Promise((resolve) => setTimeout(resolve, 2000));
         const todos = await axios.get(`${BASE_URL}?sortBy=createdAt&order=asc`);
@@ -24,7 +23,11 @@ const useTodosApi = () => {
         await axios.delete(`${BASE_URL}/${id}`)
     }
 
-    return { fetchTodos, postTodo, delTodo }
+    async function updateTodo(id: number, task: string) {
+        await axios.put(`${BASE_URL}/${id}`, { task })
+    }
+
+    return { fetchTodos, postTodo, delTodo, updateTodo }
 }
 
 export default useTodosApi;
