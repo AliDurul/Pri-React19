@@ -22,7 +22,6 @@ interface ITodoContext {
     loading: boolean;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const TodoContext = createContext<ITodoContext | null>(null);
 
 export function TodoProvider({ children }: { children: React.ReactNode }) {
@@ -35,17 +34,25 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
     const [editValue, setEditValue] = useState("");
     const [loading, setLoading] = useState(false);
 
-
     const doneCount = todos.filter((t) => t.isDone).length;
     const count = todos.length;
+
+    const refreshData = async () => {
+        const todosArr = await fetchTodos()
+        setTodos(todosArr);
+        setLoading(false);
+    }
 
     const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        await postTodo(taskInput);
+        setLoading(true);
+        
+        const task = taskInput.trim();
         setTaskInput("");
 
-        setLoading(true);
+        await postTodo(task);
+
         const todos = await fetchTodos()
         setTodos(todos);
         setLoading(false);
@@ -53,21 +60,23 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
     };
 
     const saveEdit = async (id: number) => {
-        await updateTodo(id, editValue);
+        setLoading(true);
+
+        await updateTodo(id, { task: editValue });
         setEditingId(null);
 
-        setLoading(true);
-        const todos = await fetchTodos()
-        setTodos(todos);
-        setLoading(false);
+        refreshData();
     }
 
-    const toggleDone = (id: number) => {
-        setTodos((prev) =>
-            prev.map((t) =>
-                t.id === id ? { ...t, isDone: !t.isDone } : t
-            )
-        )
+    const toggleDone = async (id: number) => {
+
+        setLoading(true);
+
+        const todo = todos.find((t) => t.id === id);
+        await updateTodo(id, { isDone: !todo?.isDone })
+
+        refreshData();
+
     }
 
     const startEditing = (todo: ITodo) => {
@@ -76,12 +85,10 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
     }
 
     const deleteTodo = async (id: number) => {
+        setLoading(true);
         await delTodo(id)
 
-        setLoading(true);
-        const todos = await fetchTodos()
-        setTodos(todos);
-        setLoading(false);
+        refreshData();
     }
 
     useEffect(() => {
@@ -115,8 +122,6 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
     return <TodoContext.Provider value={values}> {children} </TodoContext.Provider>
 }
 
-
-// eslint-disable-next-line react-refresh/only-export-components
 export function useTodoContext() {
     const context = useContext(TodoContext);
 

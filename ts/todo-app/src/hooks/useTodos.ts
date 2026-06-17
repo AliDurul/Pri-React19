@@ -1,30 +1,33 @@
-//     const fetchData = async () => {
-//         const todos = await axios.get("https://6a247cb6420469ff067b18f6.mockapi.io/todos")
-//         setTodos(todos.data)
-// }
-
 import axios from "axios";
-const BASE_URL = "https://6a247cb6420469ff067b18f6.mockapi.io/todos"
+const BASE_URL = "https://6a247cb6420469ff067b18f6.mockapi.io/todos";
+
+const client = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token 1234567890abcdef"
+    },
+});
 
 
 const useTodosApi = () => {
 
     async function fetchTodos() {
         // await new Promise((resolve) => setTimeout(resolve, 2000));
-        const todos = await axios.get(`${BASE_URL}?sortBy=createdAt&order=asc`);
+        const todos = await client.get('?sortBy=createdAt&order=asc');
         return todos.data
     }
 
     async function postTodo(task: string) {
-        await axios.post(BASE_URL, { task });
+        await client.post('', { task });
     }
 
     async function delTodo(id: number) {
-        await axios.delete(`${BASE_URL}/${id}`)
+        await client.delete(`/${id}`)
     }
 
-    async function updateTodo(id: number, task: string) {
-        await axios.put(`${BASE_URL}/${id}`, { task })
+    async function updateTodo(id: number, data: { task?: string, isDone?: boolean }) {
+        await client.put(`/${id}`, data)
     }
 
     return { fetchTodos, postTodo, delTodo, updateTodo }
