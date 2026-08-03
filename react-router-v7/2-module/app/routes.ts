@@ -22,10 +22,6 @@ export default [
     ]),
 
 
-    // posts
-    // posts/id
-    // posts/new
-
     // prefix(url, children)
     ...prefix('posts', [
         index("routes/posts.tsx"),
